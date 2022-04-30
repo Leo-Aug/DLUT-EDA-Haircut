@@ -2,16 +2,16 @@ from sre_constants import SUCCESS
 from playwright.sync_api import Playwright, sync_playwright, expect
 import itertools
 
-# TIME_QUESTION_TITLES = [
-#     "您的意向时间段 - 早上",
-#     "您的意向时间段 - 下午",
-#     "您的意向时间段 - 晚上",
-# ]
 TIME_QUESTION_TITLES = [
-    "早上",
-    "下午",
-    "晚上",
+    "您的意向时间段 - 早上",
+    "您的意向时间段 - 下午",
+    "您的意向时间段 - 晚上",
 ]
+# TIME_QUESTION_TITLES = [
+#     "早上",
+#     "下午",
+#     "晚上",
+# ]
 
 def get_time_period(time: str) -> str:
     hour = int(time.split(":")[0])
@@ -35,7 +35,7 @@ def reserve(name: str, phone_number: str, times: list, max: int, barber: str, mo
 
         # 开启 https://www.lediaocha.com/r/g7qmz 同时监听带有页面数据的请求，将请求结果保存到 response_info
         with page.expect_response("https://www.lediaocha.com/*/init") as response_info:
-            page.goto("https://www.lediaocha.com/r/g7qmz")
+            page.goto("https://www.lediaocha.com/r/mpgp5")
             while not page.locator("text=你的姓名").is_visible():
                 if page.locator("text=问卷已关闭如有疑问，请联系问卷发布者").is_visible():
                     print("问卷已关闭，尝试刷新页面")
@@ -60,22 +60,22 @@ def reserve(name: str, phone_number: str, times: list, max: int, barber: str, mo
                                  num_of_people_in_timeid[str(options["id"])] for options in time_options}
 
         # Fill input[id="430956"] with name
-        # page.locator(".node:has-text('您的姓名')").locator("input").fill(name)
-        page.locator(".node:has-text('你的姓名')").locator("input").fill(name)
+        page.locator(".node:has-text('您的姓名')").locator("input").fill(name)
+        # page.locator(".node:has-text('你的姓名')").locator("input").fill(name)
 
         # Fill input[id="430957"] with phone
-        # page.locator(".node:has-text('您的手机号')").locator("input").fill(phone_number)
-        page.locator(".node:has-text('你的手机号')").locator("input").fill(phone_number)
+        page.locator(".node:has-text('您的手机号')").locator("input").fill(phone_number)
+        # page.locator(".node:has-text('你的手机号')").locator("input").fill(phone_number)
 
         # click input[value="4355474"]
-        # page.locator(
-        #     ".node:has-text('请选择发型师')").locator("label:has-text('{}')".format(barber)).click()
-        page.locator(".node:has-text('理发师')").locator("label:has-text('{}')".format(barber)).click()
+        page.locator(
+            ".node:has-text('请选择发型师')").locator("label:has-text('{}')".format(barber)).click()
+        # page.locator(".node:has-text('理发师')").locator("label:has-text('{}')".format(barber)).click()
 
         # Click input[value="4355478"]
-        # page.locator(
-        #     ".node:has-text('预约项目')").locator("label:has-text('{}')".format(mode)).click()
-        page.locator(".node:has-text('选项')").locator("label:has-text('{}')".format(mode)).click()
+        page.locator(
+            ".node:has-text('预约项目')").locator("label:has-text('{}')".format(mode)).click()
+        # page.locator(".node:has-text('选项')").locator("label:has-text('{}')".format(mode)).click()
 
         # 按照优先级时间表依次查询
         # 若符合最大容忍人数要求，则直接选择
@@ -98,10 +98,10 @@ def reserve(name: str, phone_number: str, times: list, max: int, barber: str, mo
                 minute = int(time.split(":")[1])
 
                 # 点击对应的时间按钮
-                # time_period_question = page.locator(
-                # ".node:has-text('您的意向时间段 - {}')".format(time_period))
                 time_period_question = page.locator(
-                ".node:has-text('{}')".format(time_period))
+                ".node:has-text('您的意向时间段 - {}')".format(time_period))
+                # time_period_question = page.locator(
+                # ".node:has-text('{}')".format(time_period))
 
                 time_period_question.locator(
                 "label:has-text('{}')".format(hour)).locator("text={}".format(minute)).click()
@@ -110,8 +110,8 @@ def reserve(name: str, phone_number: str, times: list, max: int, barber: str, mo
         page.locator("button:has-text(\"提交\")").click()
 
         # Click text=提交成功，感谢您的参与
-        # page.locator("text=预约成功").click()
-        page.locator("text=提交成功，感谢您的参与").click()
+        page.locator("text=预约成功").click()
+        # page.locator("text=提交成功，感谢您的参与").click()
         is_success = True
         # ---------------------
         context.close()
